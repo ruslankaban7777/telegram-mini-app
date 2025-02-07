@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Mini App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Проверка файлов и номеров</h1>
+
+    <div class="section">
+        <h2>Проверка файлов</h2>
+        <input type="file" id="file-input">
+        <button onclick="checkFile()">Проверить файл</button>
+        <p id="file-result"></p>
+    </div>
+
+    <div class="section">
+        <h2>Проверка номеров</h2>
+        <input type="text" id="phone-input" placeholder="Введите номер телефона">
+        <button onclick="checkPhone()">Проверить номер</button>
+        <p id="phone-result"></p>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+
+        // Инициализация Mini App
+        tg.ready();
+
+        // Проверка файла
+        function checkFile() {
+            const fileInput = document.getElementById('file-input');
+            const file = fileInput.files[0];
+            if (file) {
+                tg.sendData(JSON.stringify({ type: 'check_file', filename: file.name }));
+                document.getElementById('file-result').innerText = Файл "${file.name}" отправлен на проверку.;
+            } else {
+                document.getElementById('file-result').innerText = 'Пожалуйста, выберите файл.';
+            }
+        }
+
+        // Проверка номера
+        function checkPhone() {
+            const phone = document.getElementById('phone-input').value;
+            if (phone) {
+                tg.sendData(JSON.stringify({ type: 'check_phone', phone }));
+                document.getElementById('phone-result').innerText = Номер "${phone}" отправлен на проверку.;
+            } else {
+                document.getElementById('phone-result').innerText = 'Пожалуйста, введите номер телефона.';
+            }
+        }
+    </script>
+</body>
+</html>
